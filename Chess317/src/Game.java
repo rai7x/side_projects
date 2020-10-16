@@ -1,4 +1,4 @@
-enum GameStatus{winWhite, winBlack, draw}
+enum GameStatus{inProgress, winWhite, winBlack, draw}
 
 public class Game {
 	GameStatus status;
