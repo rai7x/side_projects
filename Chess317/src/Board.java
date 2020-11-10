@@ -1,33 +1,36 @@
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 
-public class Board {
+public class Board{
 	Square[][] board = new Square[8][8];
+	Square selectedSquare = null; //if the board has a square selected, this will not be null
 	
-	BoardFrame myFrame = new BoardFrame(this);
-	
-	public Board() {
+	public void buildBoard(BoardFrame frame) {
 		for(int row = 0; row < 8; row++) {
 			for(int col = 0; col < 8; col++) {
 				int sum = row+col;
+				SquareButton sbutton = new SquareButton();
 				if (sum%2==0) {
-					SquareButton sbutton = new SquareButton();
-					myFrame.add(sbutton);
+					frame.add(sbutton);
 					sbutton.setBackground(Color.LIGHT_GRAY);
 					//if the sum of row and col is even, then it's a white square
-					board[row][col] = new Square(row, col, Colour.WHITE, sbutton);			
+					board[row][col] = new Square(row, col, Colour.WHITE, sbutton);
+					
 				} else {
-					SquareButton sbutton = new SquareButton();
-					myFrame.add(sbutton);
+					frame.add(sbutton);
 					sbutton.setBackground(Color.DARK_GRAY);
 					//if the sum of row and col is odd, then it's a black square
 					board[row][col] = new Square(row, col, Colour.BLACK, sbutton);
 				}
+				sbutton.setSquare(board[row][col]);
+				sbutton.setBoard(this);
 			}
 		}
-		myFrame.setSize(600,600);  
-		myFrame.setVisible(true);
+		frame.setSize(600,600);  
+		frame.setVisible(true);
 	}
 	
 	//returns a string representation of a Board object
@@ -54,7 +57,7 @@ public class Board {
 		return board_rep;
 	}
 	
-	//setup the board
+	//setup the board by placing the pieces on the board in starting position
 	public void setup() {
 		//place white pawns
 		for(int col = 0; col < 8; col++) {
@@ -88,25 +91,32 @@ public class Board {
 	//moves a piece from starting square to endings square
 	public void performMove(Move m) {
 		//set the destination square to contain the moving piece
-		board[m.end.x][m.end.y].myPiece = board[m.start.x][m.start.y].myPiece;
+		m.end.myPiece = m.start.myPiece;
 		//set the starting square to contain nothing
-		board[m.start.x][m.start.y].myPiece = null;
-		updateDisplay();
+		m.start.myPiece = null;
+		updateDisplayAt(m.start);
+		updateDisplayAt(m.end);
 	}
 	
-	//update every square's icon based on what kind of piece it has
+	//update a single square's icon based on what kind of piece it has
+	public void updateDisplayAt(Square s) {
+		if (s.myPiece!=null) {
+			s.mySB.setIcon(s.myPiece.icon);
+		} else {
+			s.mySB.setIcon(null);
+		}
+	}
+	
+	//update the entire board visually
 	public void updateDisplay() {
 		for(int row = 0; row < 8; row++) {
 			for(int col = 0; col < 8; col++) {
-				if (board[row][col].myPiece!=null) {
-//					board[row][col].myPiece.icon.getImage().flush();
-					board[row][col].my_sb.setIcon(board[row][col].myPiece.icon);
-				} else {
-					board[row][col].my_sb.setIcon(null);
-				}
+				updateDisplayAt(board[row][col]);
 			}
 		}
 	}
+
+	
 }
 
 
