@@ -29,6 +29,7 @@ public class Board{
 				sbutton.setBoard(this);
 			}
 		}
+		frame.setTitle("Chess317");
 		frame.setSize(600,600);  
 		frame.setVisible(true);
 	}
