@@ -24,11 +24,18 @@ public class Move {
 		this.end = end;
 	}
 
-	public boolean equals(Move other)
+	@Override
+	public boolean equals(Object other)
 	{
+		if (other==null) return false;
+		Move m = (Move) other; 
 		boolean result;
-		result = ((start==other.start)&&(end==other.end));
+		result = ((start.equals(m.start))&&(end.equals(m.end)));
 		return result;
+	}
+	
+	public String toString() {
+		return "Starting Square: (" + start.row + ", " + start.col + ") End Square: (" + end.row + ", " + end.col + ")";
 	}
 }
 

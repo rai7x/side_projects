@@ -13,15 +13,16 @@ public class Board{
 			for(int col = 0; col < 8; col++) {
 				int sum = row+col;
 				SquareButton sbutton = new SquareButton();
+				frame.add(sbutton);
 				if (sum%2==0) {
-					frame.add(sbutton);
 					sbutton.setBackground(Color.LIGHT_GRAY);
+					sbutton.defaultColor = Color.LIGHT_GRAY;
 					//if the sum of row and col is even, then it's a white square
 					board[row][col] = new Square(row, col, Colour.WHITE, sbutton);
 					
 				} else {
-					frame.add(sbutton);
 					sbutton.setBackground(Color.DARK_GRAY);
+					sbutton.defaultColor = Color.DARK_GRAY;
 					//if the sum of row and col is odd, then it's a black square
 					board[row][col] = new Square(row, col, Colour.BLACK, sbutton);
 				}
@@ -61,9 +62,9 @@ public class Board{
 	//setup the board by placing the pieces on the board in starting position
 	public void setup() {
 		//place white pawns
-		for(int col = 0; col < 8; col++) {
-			board[6][col].myPiece = new Pawn(Colour.WHITE, new ImageIcon("whitePawn.png"));
-		}
+//		for(int col = 0; col < 8; col++) {
+//			board[6][col].myPiece = new Pawn(Colour.WHITE, new ImageIcon("whitePawn.png"));
+//		}
 		//place white pieces
 		board[7][0].myPiece = new Rook(Colour.WHITE, new ImageIcon("whiteRook.png"));
 		board[7][1].myPiece = new Knight(Colour.WHITE, new ImageIcon("whiteKnight.png"));
@@ -74,9 +75,9 @@ public class Board{
 		board[7][6].myPiece = new Knight(Colour.WHITE, new ImageIcon("whiteKnight.png"));
 		board[7][7].myPiece = new Rook(Colour.WHITE, new ImageIcon("whiteRook.png"));
 		//place black pawns
-		for(int col = 0; col < 8; col++) {
-			board[1][col].myPiece = new Pawn(Colour.BLACK, new ImageIcon("blackPawn.png"));
-		}
+//		for(int col = 0; col < 8; col++) {
+//			board[1][col].myPiece = new Pawn(Colour.BLACK, new ImageIcon("blackPawn.png"));
+//		}
 		//place black pieces
 		board[0][0].myPiece = new Rook(Colour.BLACK, new ImageIcon("blackRook.png"));
 		board[0][1].myPiece = new Knight(Colour.BLACK, new ImageIcon("blackKnight.png"));

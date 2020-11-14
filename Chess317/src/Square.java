@@ -15,5 +15,17 @@ public class Square {
 	public void setPiece(Piece p) {
 		myPiece = p;
 	}
+	
+	@Override
+	public boolean equals(Object other)
+	{
+		if (other==null) return false;
+		Square s = (Square) other; 
+		boolean result;
+		result = ((row==s.row)&&(col==s.col));
+		return result;
+	}
+	
+
 }
 

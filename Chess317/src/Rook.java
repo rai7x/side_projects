@@ -2,8 +2,14 @@ import javax.swing.ImageIcon;
 
 public class Rook extends Piece {
 
+	
+	
 	public Rook(Colour colour, ImageIcon icon) {
 		super(colour, icon);
+		directions.add(Direction.N);
+		directions.add(Direction.E);
+		directions.add(Direction.S);
+		directions.add(Direction.W);
 	}
 
 	@Override
