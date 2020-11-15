@@ -191,6 +191,94 @@ public class SquareButton extends JButton implements ActionListener {
 					currentCol--; //go right the board
 				}
 				break;
+			case NNE:
+				currentRow = mySquare.row;
+				currentCol = mySquare.col;
+				//check if move is within bounds
+				if (!(((currentRow - 2) < 0) || (currentCol + 1) > 7)) {
+					Square targetSquare = myBoard.board[currentRow - 2][currentCol + 1];
+					if (targetSquare.myPiece == null) {
+						result.add(new Move(mySquare, targetSquare));
+					}
+				}
+				break;
+			case NEE:
+				currentRow = mySquare.row;
+				currentCol = mySquare.col;
+				//check if move is within bounds
+				if (!(((currentRow - 1) < 0) || (currentCol + 2) > 7)) {
+					Square targetSquare = myBoard.board[currentRow - 1][currentCol + 2];
+					if (targetSquare.myPiece == null) {
+						result.add(new Move(mySquare, targetSquare));
+					}
+				}
+				break;
+			case SEE:
+				currentRow = mySquare.row;
+				currentCol = mySquare.col;
+				//check if move is within bounds
+				if (!(((currentRow + 1) > 7) || (currentCol + 2) > 7)) {
+					Square targetSquare = myBoard.board[currentRow + 1][currentCol + 2];
+					if (targetSquare.myPiece == null) {
+						result.add(new Move(mySquare, targetSquare));
+					}
+				}
+				break;
+			case SSE:
+				currentRow = mySquare.row;
+				currentCol = mySquare.col;
+				//check if move is within bounds
+				if (!(((currentRow + 2) > 7) || (currentCol + 1) > 7)) {
+					Square targetSquare = myBoard.board[currentRow + 2][currentCol + 1];
+					if (targetSquare.myPiece == null) {
+						result.add(new Move(mySquare, targetSquare));
+					}
+				}
+				break;
+			case SSW:
+				currentRow = mySquare.row;
+				currentCol = mySquare.col;
+				//check if move will go out of bounds
+				if (!(((currentRow + 2) > 7) || (currentCol - 1) < 0)) {
+					Square targetSquare = myBoard.board[currentRow + 2][currentCol - 1];
+					if (targetSquare.myPiece == null) {
+						result.add(new Move(mySquare, targetSquare));
+					}
+				}
+				break;
+			case SWW:
+				currentRow = mySquare.row;
+				currentCol = mySquare.col;
+				//check if move is within bounds
+				if (!(((currentRow + 1) > 7) || (currentCol - 2) < 0)) {
+					Square targetSquare = myBoard.board[currentRow + 1][currentCol - 2];
+					if (targetSquare.myPiece == null) {
+						result.add(new Move(mySquare, targetSquare));
+					}
+				}
+				break;
+			case NWW:
+				currentRow = mySquare.row;
+				currentCol = mySquare.col;
+				//check if move is within bounds
+				if (!(((currentRow - 1) < 0) || (currentCol - 2) < 0)) {
+					Square targetSquare = myBoard.board[currentRow - 1][currentCol - 2];
+					if (targetSquare.myPiece == null) {
+						result.add(new Move(mySquare, targetSquare));
+					}
+				}
+				break;
+			case NNW:
+				currentRow = mySquare.row;
+				currentCol = mySquare.col;
+				//check if move is within bounds
+				if (!(((currentRow - 2) < 0) || (currentCol - 1) < 0)) {
+					Square targetSquare = myBoard.board[currentRow - 2][currentCol - 1];
+					if (targetSquare.myPiece == null) {
+						result.add(new Move(mySquare, targetSquare));
+					}
+				}
+				break;
 		}
 			
 		return result;
