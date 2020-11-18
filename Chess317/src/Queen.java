@@ -4,6 +4,7 @@ public class Queen extends Piece {
 
 	public Queen(Colour colour, ImageIcon icon) {
 		super(colour, icon);
+		range = 8;
 		directions.add(Direction.N);
 		directions.add(Direction.E);
 		directions.add(Direction.S);

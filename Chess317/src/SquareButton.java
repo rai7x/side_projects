@@ -90,59 +90,64 @@ public class SquareButton extends JButton implements ActionListener {
 	ArrayList<Move> getValidMoves(Direction d) {
 		ArrayList<Move> result = new ArrayList<Move>();
 		int currentRow, currentCol;
+		int steps = mySquare.myPiece.range;
 		switch (d) {
 			case N:
 				currentRow = mySquare.row - 1;
 				currentCol = mySquare.col;
-				while (currentRow >= 0) {
+				while ((currentRow >= 0) && (steps > 0)) {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
 						result.add(new Move(mySquare, currSquare));
 					} else break;
 					currentRow--; //go up the board
+					steps--;
 				}
 				break;
 			case E:
 				currentRow = mySquare.row;
 				currentCol = mySquare.col + 1;
-				while (currentCol <= 7) {
+				while ((currentCol <= 7) && (steps > 0)) {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
 						result.add(new Move(mySquare, currSquare));
 					} else break;
 					currentCol++; //go right the board
+					steps--;
 				}
 				break;
 			case S:
 				currentRow = mySquare.row + 1;
 				currentCol = mySquare.col;
-				while (currentRow <= 7) {
+				while ((currentRow <= 7) && (steps > 0)) {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
 						result.add(new Move(mySquare, currSquare));
 					} else break;
 					currentRow++; //go down the board
+					steps--;
 				}
 				break;
 			case W:
 				currentRow = mySquare.row;
 				currentCol = mySquare.col - 1;
-				while (currentCol >= 0) {
+				while ((currentCol >= 0) && (steps > 0)) {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
 						result.add(new Move(mySquare, currSquare));
 					} else break;
 					currentCol--; //go left the board
+					steps--;
 				}
 				break;
 			case NE:
 				currentRow = mySquare.row - 1;
 				currentCol = mySquare.col + 1;
-				while ((currentRow >= 0) && (currentCol <= 7)) {
+				while ((currentRow >= 0) && (currentCol <= 7) && (steps > 0)) {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
@@ -150,12 +155,13 @@ public class SquareButton extends JButton implements ActionListener {
 					} else break;
 					currentRow--; //go up the board
 					currentCol++; //go right the board
+					steps--;
 				}
 				break;
 			case SE:
 				currentRow = mySquare.row + 1;
 				currentCol = mySquare.col + 1;
-				while ((currentRow <= 7) && (currentCol <= 7)) {
+				while ((currentRow <= 7) && (currentCol <= 7) && (steps > 0)) {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
@@ -163,12 +169,13 @@ public class SquareButton extends JButton implements ActionListener {
 					} else break;
 					currentRow++; //go up the board
 					currentCol++; //go right the board
+					steps--;
 				}
 				break;
 			case SW:
 				currentRow = mySquare.row + 1;
 				currentCol = mySquare.col - 1;
-				while ((currentRow <= 7) && (currentCol >= 0)) {
+				while ((currentRow <= 7) && (currentCol >= 0) && (steps > 0)) {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
@@ -176,12 +183,13 @@ public class SquareButton extends JButton implements ActionListener {
 					} else break;
 					currentRow++; //go up the board
 					currentCol--; //go right the board
+					steps--;
 				}
 				break;
 			case NW:
 				currentRow = mySquare.row - 1;
 				currentCol = mySquare.col - 1;
-				while ((currentRow >= 0) && (currentCol >= 0)) {
+				while ((currentRow >= 0) && (currentCol >= 0) && (steps > 0)) {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
@@ -189,6 +197,7 @@ public class SquareButton extends JButton implements ActionListener {
 					} else break;
 					currentRow--; //go up the board
 					currentCol--; //go right the board
+					steps--;
 				}
 				break;
 			case NNE:

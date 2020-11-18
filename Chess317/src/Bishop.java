@@ -4,6 +4,7 @@ public class Bishop extends Piece {
 
 	public Bishop(Colour colour, ImageIcon icon) {
 		super(colour, icon);
+		range = 8;
 		directions.add(Direction.NE);
 		directions.add(Direction.SE);
 		directions.add(Direction.SW);
