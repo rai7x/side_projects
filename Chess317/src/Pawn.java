@@ -7,9 +7,9 @@ public class Pawn extends Piece {
 	public Pawn(Colour colour, ImageIcon icon) {
 		super(colour, icon);
 		if (colour==Colour.WHITE) {
-			directions.add(Direction.N);
+			directions.add(Direction.NP);
 		} else {
-			directions.add(Direction.S);
+			directions.add(Direction.SP);
 		}
 		range = 1;
 		// TODO Auto-generated constructor stub

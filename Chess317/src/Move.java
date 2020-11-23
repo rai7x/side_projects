@@ -18,6 +18,7 @@
 public class Move {
 	Square start;
 	Square end;
+	Direction moveType;
 	
 	public Move(Square start, Square end) {
 		this.start = start;

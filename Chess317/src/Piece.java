@@ -19,4 +19,4 @@ public abstract class Piece {
 	
 }
 
-enum Direction {N, E, S, W, NE, SE, NW, SW, NNE, NEE, SEE, SSE, SSW, SWW, NWW, NNW};
+enum Direction {N, E, S, W, NE, SE, NW, SW, NNE, NEE, SEE, SSE, SSW, SWW, NWW, NNW, NP, SP, KSC, QSC};

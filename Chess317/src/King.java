@@ -13,6 +13,8 @@ public class King extends Piece {
 		directions.add(Direction.SE);
 		directions.add(Direction.SW);
 		directions.add(Direction.NW);
+		directions.add(Direction.KSC);
+		directions.add(Direction.QSC);
 	}
 
 	@Override

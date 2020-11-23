@@ -2,9 +2,12 @@ public class main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
 		Board b = new Board();
-		b.buildBoard(new BoardFrame(b));
+		BoardPanel bp = new BoardPanel(b);
+		b.buildBoard(bp);
 		b.setup();
+		BoardHolder bh = new BoardHolder(bp);
 		System.out.print(b);
 		
 //		System.out.println();

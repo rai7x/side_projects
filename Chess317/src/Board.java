@@ -8,12 +8,12 @@ public class Board{
 	Square[][] board = new Square[8][8];
 	Square selectedSquare = null; //if the board has a square selected, this will not be null
 	
-	public void buildBoard(BoardFrame frame) {
+	public void buildBoard(BoardPanel panel) {
 		for(int row = 0; row < 8; row++) {
 			for(int col = 0; col < 8; col++) {
 				int sum = row+col;
 				SquareButton sbutton = new SquareButton();
-				frame.add(sbutton);
+				panel.add(sbutton);
 				if (sum%2==0) {
 					sbutton.setBackground(Color.LIGHT_GRAY);
 					sbutton.defaultColor = Color.LIGHT_GRAY;
@@ -29,10 +29,8 @@ public class Board{
 				sbutton.setSquare(board[row][col]);
 				sbutton.setBoard(this);
 			}
-		}
-		frame.setTitle("Chess317");
-		frame.setSize(600,600);  
-		frame.setVisible(true);
+		}  
+//		frame.setVisible(true);
 	}
 	
 	//returns a string representation of a Board object
@@ -94,8 +92,20 @@ public class Board{
 	public void performMove(Move m) {
 		//set the destination square to contain the moving piece
 		m.end.myPiece = m.start.myPiece;
+		m.end.myPiece.hasMoved = true;
 		//set the starting square to contain nothing
 		m.start.myPiece = null;
+		System.out.println(m.moveType);
+		if (m.moveType == Direction.KSC) {
+			//if move type is castling, move the rook too
+			performMove(new Move(board[m.end.row][m.end.col+1], board[m.end.row][m.end.col-1]));
+			System.out.println("Castling");
+		}
+		if (m.moveType == Direction.QSC) {
+			//if move type is castling, move the rook too
+			performMove(new Move(board[m.end.row][m.end.col-2], board[m.end.row][m.end.col+1]));
+			System.out.println("Castling");
+		}
 		updateDisplayAt(m.start);
 		updateDisplayAt(m.end);
 	}
