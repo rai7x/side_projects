@@ -44,6 +44,7 @@ public class SquareButton extends JButton implements ActionListener {
 					Move moveFound = validMovesList.get(validMovesList.indexOf(attemptedMove));
 					System.out.println("Move Found Type: " + moveFound.moveType);
 					myBoard.performMove(moveFound);
+					myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
 				} else {
 					//unselect the square
 					myBoard.selectedSquare = null;
@@ -58,18 +59,18 @@ public class SquareButton extends JButton implements ActionListener {
 		}
 		//if starting square is not selected
 		else {
-			if (mySquare.myPiece!=null)	{
+			if ((mySquare.myPiece!=null) && (mySquare.myPiece.colour == myBoard.activeColour)) {
 				myBoard.selectedSquare = mySquare;
 				System.out.println("Selected starting square: " + myBoard.selectedSquare.row + ", " + myBoard.selectedSquare.col);
 				//generate valid moves
 				validMoves = getValidMoves();
 				
 				//highlight valid squares if starting square has not been selected yet
-					int size = validMoves.size();
-					for (int i = 0; i < size; i++) {
-						SquareButton sb = validMoves.get(i).end.mySB;
-						sb.setBackground(sb.getBackground().brighter());
-					}
+				int size = validMoves.size();
+				for (int i = 0; i < size; i++) {
+					SquareButton sb = validMoves.get(i).end.mySB;
+					sb.setBackground(sb.getBackground().brighter());
+				}
 			}
 		}
 	}

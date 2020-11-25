@@ -17,7 +17,7 @@ public class BoardHolder extends JFrame {
 		
 		
 		myEastPanel = new EastPanel();
-		UndoButton ub = new UndoButton();
+		UndoButton ub = new UndoButton(myBoardPanel.myBoard);
 		myEastPanel.add(ub);
 		
 		add(myWestPanel, BorderLayout.WEST);

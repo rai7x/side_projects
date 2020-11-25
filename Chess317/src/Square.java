@@ -25,7 +25,11 @@ public class Square {
 		result = ((row==s.row)&&(col==s.col));
 		return result;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "[" + row + ", " + col + "]";
+	}
 
 }
 

@@ -1,12 +1,14 @@
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.util.ArrayList;
+import java.util.Stack;
 import javax.swing.ImageIcon;
 
 public class Board{
 	Square[][] board = new Square[8][8];
 	Square selectedSquare = null; //if the board has a square selected, this will not be null
+	Stack<Move> moveStack = new Stack<Move>();
+	Colour activeColour = Colour.WHITE;
+	Game myGame;
 	
 	public void buildBoard(BoardPanel panel) {
 		for(int row = 0; row < 8; row++) {
@@ -86,10 +88,18 @@ public class Board{
 		board[0][6].myPiece = new Knight(Colour.BLACK, new ImageIcon("blackKnight.png"));
 		board[0][7].myPiece = new Rook(Colour.BLACK, new ImageIcon("blackRook.png"));
 		updateDisplay();
+		myGame = new Game(this); //adding the pieces to new Game's white/black Lists
 	}
 	
 	//moves a piece from starting square to endings square
 	public void performMove(Move m) {
+		ArrayList<Square> activeList = (activeColour == Colour.WHITE) ? myGame.whiteList : myGame.blackList;
+		ArrayList<Square> oppositeList = (activeColour == Colour.WHITE) ? myGame.blackList : myGame.whiteList;
+		//if the destination square already has a piece, store it into capturedPiece
+		if (m.end.myPiece != null) {
+			m.capturedPiece = m.end.myPiece;
+			oppositeList.remove(m.end);
+		}
 		//set the destination square to contain the moving piece
 		m.end.myPiece = m.start.myPiece;
 		m.end.myPiece.hasMoved = true;
@@ -108,6 +118,41 @@ public class Board{
 		}
 		updateDisplayAt(m.start);
 		updateDisplayAt(m.end);
+		moveStack.push(m);
+		
+		activeList.add(m.end);
+		activeList.remove(m.start);
+		
+		displayLists();
+	}
+	
+	//given a move object, undo the move
+	public void undoMove(Move m) {
+		ArrayList<Square> activeList = (activeColour == Colour.WHITE) ? myGame.whiteList : myGame.blackList;
+		ArrayList<Square> oppositeList = (activeColour == Colour.WHITE) ? myGame.blackList : myGame.whiteList;
+		//reverse starting square
+		m.start.myPiece = m.end.myPiece;
+		//reverse end square
+		m.end.myPiece = m.capturedPiece;
+		if ((m.moveType == Direction.KSC) || (m.moveType == Direction.QSC)) {
+			m.start.myPiece.hasMoved = false;
+			Move poppedMove = moveStack.pop();
+			poppedMove.end.myPiece.hasMoved = false;
+			undoMove(poppedMove);
+		}
+		updateDisplayAt(m.start);
+		updateDisplayAt(m.end);
+		
+		//it's the turn AFTER the move has been played, i.e. activeColour != the move m's active colour
+		oppositeList.add(m.start);
+		oppositeList.remove(m.end);
+		
+		//if this move captured an enemy piece
+		if (m.capturedPiece != null) {
+			activeList.add(m.end);
+		}
+		
+		displayLists();
 	}
 	
 	//update a single square's icon based on what kind of piece it has
@@ -128,6 +173,12 @@ public class Board{
 		}
 	}
 
+	private void displayLists() {
+		System.out.println("White List");
+		myGame.printList(myGame.whiteList);
+		System.out.println("Black List");
+		myGame.printList(myGame.blackList);
+	}
 	
 }
 
