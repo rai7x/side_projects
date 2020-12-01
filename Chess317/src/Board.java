@@ -9,6 +9,7 @@ public class Board{
 	Stack<Move> moveStack = new Stack<Move>();
 	Colour activeColour = Colour.WHITE;
 	Game myGame;
+	Square whiteKingSquare, blackKingSquare; //these squares point to the white/black kings throughout the game
 	
 	public void buildBoard(BoardPanel panel) {
 		for(int row = 0; row < 8; row++) {
@@ -71,6 +72,7 @@ public class Board{
 		board[7][2].myPiece = new Bishop(Colour.WHITE, new ImageIcon("whiteBishop.png"));
 		board[7][3].myPiece = new Queen(Colour.WHITE, new ImageIcon("whiteQueen.png"));
 		board[7][4].myPiece = new King(Colour.WHITE, new ImageIcon("whiteKing.png"));
+		whiteKingSquare = board[7][4];
 		board[7][5].myPiece = new Bishop(Colour.WHITE, new ImageIcon("whiteBishop.png"));
 		board[7][6].myPiece = new Knight(Colour.WHITE, new ImageIcon("whiteKnight.png"));
 		board[7][7].myPiece = new Rook(Colour.WHITE, new ImageIcon("whiteRook.png"));
@@ -84,6 +86,7 @@ public class Board{
 		board[0][2].myPiece = new Bishop(Colour.BLACK, new ImageIcon("blackBishop.png"));
 		board[0][3].myPiece = new Queen(Colour.BLACK, new ImageIcon("blackQueen.png"));
 		board[0][4].myPiece = new King(Colour.BLACK, new ImageIcon("blackKing.png"));
+		blackKingSquare = board[0][4];
 		board[0][5].myPiece = new Bishop(Colour.BLACK, new ImageIcon("blackBishop.png"));
 		board[0][6].myPiece = new Knight(Colour.BLACK, new ImageIcon("blackKnight.png"));
 		board[0][7].myPiece = new Rook(Colour.BLACK, new ImageIcon("blackRook.png"));
@@ -102,7 +105,7 @@ public class Board{
 		}
 		//set the destination square to contain the moving piece
 		m.end.myPiece = m.start.myPiece;
-		m.end.myPiece.hasMoved = true;
+		m.end.myPiece.moveCount++;
 		//set the starting square to contain nothing
 		m.start.myPiece = null;
 		System.out.println(m.moveType);
@@ -120,10 +123,13 @@ public class Board{
 		updateDisplayAt(m.end);
 		moveStack.push(m);
 		
+		if(m.end.myPiece.mySymbol() == 'K') whiteKingSquare = m.end;
+		else if(m.end.myPiece.mySymbol() == 'k') blackKingSquare = m.end;
+		
 		activeList.add(m.end);
 		activeList.remove(m.start);
 		
-		displayLists();
+//		displayLists();
 	}
 	
 	//given a move object, undo the move
@@ -134,11 +140,14 @@ public class Board{
 		m.start.myPiece = m.end.myPiece;
 		//reverse end square
 		m.end.myPiece = m.capturedPiece;
+		//undo king-jump part of castling
 		if ((m.moveType == Direction.KSC) || (m.moveType == Direction.QSC)) {
-			m.start.myPiece.hasMoved = false;
+			m.start.myPiece.moveCount--;
 			Move poppedMove = moveStack.pop();
-			poppedMove.end.myPiece.hasMoved = false;
+			//undo rook
 			undoMove(poppedMove);
+		} else {
+			m.start.myPiece.moveCount--;
 		}
 		updateDisplayAt(m.start);
 		updateDisplayAt(m.end);
@@ -152,7 +161,11 @@ public class Board{
 			activeList.add(m.end);
 		}
 		
-		displayLists();
+		if(m.start.myPiece.mySymbol() == 'K') whiteKingSquare = m.start;
+		else if(m.start.myPiece.mySymbol() == 'k') blackKingSquare = m.start;
+		
+		activeColour = (activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE; //swap active colour
+//		displayLists();
 	}
 	
 	//update a single square's icon based on what kind of piece it has

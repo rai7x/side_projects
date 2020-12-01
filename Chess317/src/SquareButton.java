@@ -44,6 +44,25 @@ public class SquareButton extends JButton implements ActionListener {
 					Move moveFound = validMovesList.get(validMovesList.indexOf(attemptedMove));
 					System.out.println("Move Found Type: " + moveFound.moveType);
 					myBoard.performMove(moveFound);
+					//check if the move is legal - if so, undo the move
+					if (myBoard.myGame.isKingThreatened()) {
+						myBoard.myGame.undo();
+					}
+//					//debugging
+//					System.out.println("Enemy's List - My active colour was: " + myBoard.activeColour);
+//					ArrayList<Square> result = enemyValidSquares();
+//					for (Square s: result) {
+//						s.mySB.setBackground(Color.ORANGE);
+//					}
+//					myBoard.whiteKingSquare.mySB.setBackground(Color.PINK);
+//					myBoard.blackKingSquare.mySB.setBackground(Color.magenta);
+					for(Square s: myBoard.myGame.whiteList) {
+						s.mySB.setBackground(Color.CYAN);
+					}
+					for(Square s: myBoard.myGame.blackList) {
+						s.mySB.setBackground(Color.BLUE);
+					}
+//					//end of debug
 					myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
 				} else {
 					//unselect the square
@@ -56,9 +75,17 @@ public class SquareButton extends JButton implements ActionListener {
 				System.out.print(myBoard);
 			}
 			myBoard.selectedSquare = null;
+			
 		}
 		//if starting square is not selected
 		else {
+			//debugging
+			for (int row = 0; row < 8; row++) {
+				for(int col = 0; col < 8; col++) {
+					myBoard.board[row][col].mySB.setBackground(myBoard.board[row][col].mySB.defaultColor);
+				}
+			}
+			//end of debug
 			if ((mySquare.myPiece!=null) && (mySquare.myPiece.colour == myBoard.activeColour)) {
 				myBoard.selectedSquare = mySquare;
 				System.out.println("Selected starting square: " + myBoard.selectedSquare.row + ", " + myBoard.selectedSquare.col);
@@ -397,9 +424,9 @@ public class SquareButton extends JButton implements ActionListener {
 			case KSC:
 				currentRow = mySquare.row;
 				currentCol = mySquare.col;
-				if (mySquare.myPiece.hasMoved==false) {
+				if (mySquare.myPiece.moveCount==0) {
 					Piece myRook = myBoard.board[currentRow][7].myPiece;
-					if ((myRook != null) && (myRook.hasMoved==false)) {
+					if ((myRook != null) && (myRook.moveCount==0)) {
 						//check if between squares are empty
 						if ((myBoard.board[currentRow][currentCol+1].myPiece == null) &&
 						(myBoard.board[currentRow][currentCol+2].myPiece == null)) {
@@ -415,9 +442,9 @@ public class SquareButton extends JButton implements ActionListener {
 			case QSC:
 				currentRow = mySquare.row;
 				currentCol = mySquare.col;
-				if (mySquare.myPiece.hasMoved==false) {
+				if (mySquare.myPiece.moveCount==0) {
 					Piece myRook = myBoard.board[currentRow][0].myPiece;
-					if ((myRook != null) && (myRook.hasMoved==false)) {
+					if ((myRook != null) && (myRook.moveCount==0)) {
 						//check if between squares are empty
 						if ((myBoard.board[currentRow][currentCol-1].myPiece == null) &&
 						(myBoard.board[currentRow][currentCol-2].myPiece == null) &&
@@ -433,6 +460,21 @@ public class SquareButton extends JButton implements ActionListener {
 				break;
 		}
 			
+		return result;
+	}
+	
+	//returns a giant ArrayList consisting of all the valid moves of my enemy's pieces
+	public ArrayList<Square> enemyValidSquares() {
+		ArrayList<Square> result = new ArrayList<Square>();
+		ArrayList<Square> enemyList = (myBoard.activeColour == Colour.WHITE) ? myBoard.myGame.blackList : myBoard.myGame.whiteList;
+		//for every square in my enemy list
+		ArrayList<Move> tempList;
+		for (Square sq : enemyList) {
+			tempList = sq.mySB.getValidMoves();
+			for (Move m: tempList) {
+				result.add(m.end);
+			}
+		}
 		return result;
 	}
 }

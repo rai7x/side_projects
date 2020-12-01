@@ -7,7 +7,7 @@ public abstract class Piece {
 	
 	Colour colour;
 	int range;
-	boolean hasMoved = false;
+	int moveCount = 0;
 	ImageIcon icon;
 	ArrayList<Direction> directions = new ArrayList<Direction>();
 	public abstract char mySymbol(); //returns the symbol for each piece
