@@ -21,11 +21,13 @@ public class Move {
 	Direction moveType;
 	Piece capturedPiece;
 	Colour movedColour;
+	boolean isPromotion;
 	
 	public Move(Square start, Square end, Colour movedColour) {
 		this.start = start;
 		this.end = end;
 		this.movedColour = movedColour;
+		isPromotion = false;
 	}
 
 	@Override

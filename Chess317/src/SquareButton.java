@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class SquareButton extends JButton implements ActionListener {
 	Square mySquare;
@@ -58,7 +60,18 @@ public class SquareButton extends JButton implements ActionListener {
 //					}
 //					myBoard.whiteKingSquare.mySB.setBackground(Color.PINK);
 //					myBoard.blackKingSquare.mySB.setBackground(Color.magenta);
+					
+					
 					showLists();
+					//check if my opponent is checkmated by this move
+					//if opponent is in check
+					if (myBoard.isKingThreatened()) {
+						//try every possible move
+						if (myBoard.isCheckmate()) {
+							JOptionPane.showMessageDialog(new JFrame(), myBoard.activeColour + " is checkmated!");
+							System.out.println("Checkmate!");
+						}
+					} 
 //					//end of debug
 					
 				} else {
@@ -419,7 +432,7 @@ public class SquareButton extends JButton implements ActionListener {
 				currentCol = mySquare.col;
 				if (mySquare.myPiece.moveCount==0) {
 					Piece myRook = myBoard.board[currentRow][7].myPiece;
-					if ((myRook != null) && (myRook.moveCount==0)) {
+					if ((myRook != null) && (myRook instanceof Rook) && (myRook.moveCount==0) && (myRook.colour==mySquare.myPiece.colour)) {
 						//check if between squares are empty
 						if ((myBoard.board[currentRow][currentCol+1].myPiece == null) &&
 						(myBoard.board[currentRow][currentCol+2].myPiece == null)) {
@@ -437,7 +450,7 @@ public class SquareButton extends JButton implements ActionListener {
 				currentCol = mySquare.col;
 				if (mySquare.myPiece.moveCount==0) {
 					Piece myRook = myBoard.board[currentRow][0].myPiece;
-					if ((myRook != null) && (myRook.moveCount==0)) {
+					if ((myRook != null) && (myRook instanceof Rook) && (myRook.moveCount==0) && (myRook.colour==mySquare.myPiece.colour)) {
 						//check if between squares are empty
 						if ((myBoard.board[currentRow][currentCol-1].myPiece == null) &&
 						(myBoard.board[currentRow][currentCol-2].myPiece == null) &&
@@ -484,6 +497,8 @@ public class SquareButton extends JButton implements ActionListener {
 			s.mySB.setBackground(Color.BLUE);
 		}
 	}
+	
+	
 }
 
 
