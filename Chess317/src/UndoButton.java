@@ -14,6 +14,7 @@ public class UndoButton extends JButton implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (!myBoard.moveStack.isEmpty()) {
 			myBoard.undoMove(myBoard.moveStack.pop());
+			myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE; //swap active colour
 		}
 	}
 }

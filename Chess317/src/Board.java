@@ -101,22 +101,22 @@ public class Board{
 		//if the destination square already has a piece, store it into capturedPiece
 		if (m.end.myPiece != null) {
 			m.capturedPiece = m.end.myPiece;
-			oppositeList.remove(m.end);
+			oppositeList.remove(m.end); //if we are capturing an enemy's piece
 		}
 		//set the destination square to contain the moving piece
 		m.end.myPiece = m.start.myPiece;
 		m.end.myPiece.moveCount++;
 		//set the starting square to contain nothing
 		m.start.myPiece = null;
-		System.out.println(m.moveType);
+//		System.out.println(m.moveType);
 		if (m.moveType == Direction.KSC) {
 			//if move type is castling, move the rook too
-			performMove(new Move(board[m.end.row][m.end.col+1], board[m.end.row][m.end.col-1]));
+			performMove(new Move(board[m.end.row][m.end.col+1], board[m.end.row][m.end.col-1], board[m.end.row][m.end.col+1].myPiece.colour));
 			System.out.println("Castling");
 		}
 		if (m.moveType == Direction.QSC) {
 			//if move type is castling, move the rook too
-			performMove(new Move(board[m.end.row][m.end.col-2], board[m.end.row][m.end.col+1]));
+			performMove(new Move(board[m.end.row][m.end.col-2], board[m.end.row][m.end.col+1], board[m.end.row][m.end.col-2].myPiece.colour));
 			System.out.println("Castling");
 		}
 		updateDisplayAt(m.start);
@@ -134,8 +134,8 @@ public class Board{
 	
 	//given a move object, undo the move
 	public void undoMove(Move m) {
-		ArrayList<Square> activeList = (activeColour == Colour.WHITE) ? myGame.whiteList : myGame.blackList;
-		ArrayList<Square> oppositeList = (activeColour == Colour.WHITE) ? myGame.blackList : myGame.whiteList;
+		ArrayList<Square> activeList = (m.movedColour == Colour.WHITE) ? myGame.blackList : myGame.whiteList;
+		ArrayList<Square> oppositeList = (m.movedColour == Colour.WHITE) ? myGame.whiteList : myGame.blackList;
 		//reverse starting square
 		m.start.myPiece = m.end.myPiece;
 		//reverse end square
@@ -164,7 +164,8 @@ public class Board{
 		if(m.start.myPiece.mySymbol() == 'K') whiteKingSquare = m.start;
 		else if(m.start.myPiece.mySymbol() == 'k') blackKingSquare = m.start;
 		
-		activeColour = (activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE; //swap active colour
+		
+		board[0][0].mySB.showLists();
 //		displayLists();
 	}
 	
@@ -193,6 +194,17 @@ public class Board{
 		myGame.printList(myGame.blackList);
 	}
 	
+	//checks if the king is threatened by enemy pieces
+	public boolean isKingThreatened() {
+		boolean isThreatened = false;
+		//determine active king location
+		Square ks = (activeColour == Colour.WHITE) ? whiteKingSquare : blackKingSquare;
+		//check if the corresponding king's square is in that list
+		if (ks.mySB.enemyValidSquares().contains(ks)) {
+			isThreatened = true;
+		}
+		return isThreatened;
+	}
 }
 
 

@@ -36,7 +36,7 @@ public class SquareButton extends JButton implements ActionListener {
 			}
 			//making sure we do not move to the same square
 			if (myBoard.selectedSquare!=mySquare) {
-				Move attemptedMove = new Move(myBoard.selectedSquare, mySquare);
+				Move attemptedMove = new Move(myBoard.selectedSquare, mySquare, myBoard.selectedSquare.myPiece.colour);
 				System.out.println("Attempted move is: " + attemptedMove);
 				
 				//check if attempted move is valid
@@ -45,8 +45,10 @@ public class SquareButton extends JButton implements ActionListener {
 					System.out.println("Move Found Type: " + moveFound.moveType);
 					myBoard.performMove(moveFound);
 					//check if the move is legal - if so, undo the move
-					if (myBoard.myGame.isKingThreatened()) {
-						myBoard.myGame.undo();
+					if (myBoard.isKingThreatened()) {
+						myBoard.undoMove(myBoard.moveStack.pop());
+					} else {
+						myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
 					}
 //					//debugging
 //					System.out.println("Enemy's List - My active colour was: " + myBoard.activeColour);
@@ -56,14 +58,9 @@ public class SquareButton extends JButton implements ActionListener {
 //					}
 //					myBoard.whiteKingSquare.mySB.setBackground(Color.PINK);
 //					myBoard.blackKingSquare.mySB.setBackground(Color.magenta);
-					for(Square s: myBoard.myGame.whiteList) {
-						s.mySB.setBackground(Color.CYAN);
-					}
-					for(Square s: myBoard.myGame.blackList) {
-						s.mySB.setBackground(Color.BLUE);
-					}
+					showLists();
 //					//end of debug
-					myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
+					
 				} else {
 					//unselect the square
 					myBoard.selectedSquare = null;
@@ -80,11 +77,7 @@ public class SquareButton extends JButton implements ActionListener {
 		//if starting square is not selected
 		else {
 			//debugging
-			for (int row = 0; row < 8; row++) {
-				for(int col = 0; col < 8; col++) {
-					myBoard.board[row][col].mySB.setBackground(myBoard.board[row][col].mySB.defaultColor);
-				}
-			}
+			showLists();
 			//end of debug
 			if ((mySquare.myPiece!=null) && (mySquare.myPiece.colour == myBoard.activeColour)) {
 				myBoard.selectedSquare = mySquare;
@@ -130,10 +123,10 @@ public class SquareButton extends JButton implements ActionListener {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
-						result.add(new Move(mySquare, currSquare));
+						result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 					} else {
 						if (currSquare.myPiece.colour!=mySquare.myPiece.colour) {
-							result.add(new Move(mySquare, currSquare));
+							result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 						}
 						break;
 					}
@@ -148,10 +141,10 @@ public class SquareButton extends JButton implements ActionListener {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
-						result.add(new Move(mySquare, currSquare));
+						result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 					} else {
 						if (currSquare.myPiece.colour!=mySquare.myPiece.colour) {
-							result.add(new Move(mySquare, currSquare));
+							result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 						}
 						break;
 					}
@@ -166,10 +159,10 @@ public class SquareButton extends JButton implements ActionListener {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
-						result.add(new Move(mySquare, currSquare));
+						result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 					} else {
 						if (currSquare.myPiece.colour!=mySquare.myPiece.colour) {
-							result.add(new Move(mySquare, currSquare));
+							result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 						}
 						break;
 					}
@@ -184,10 +177,10 @@ public class SquareButton extends JButton implements ActionListener {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
-						result.add(new Move(mySquare, currSquare));
+						result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 					} else {
 						if (currSquare.myPiece.colour!=mySquare.myPiece.colour) {
-							result.add(new Move(mySquare, currSquare));
+							result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 						}
 						break;
 					}
@@ -202,10 +195,10 @@ public class SquareButton extends JButton implements ActionListener {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
-						result.add(new Move(mySquare, currSquare));
+						result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 					} else {
 						if (currSquare.myPiece.colour!=mySquare.myPiece.colour) {
-							result.add(new Move(mySquare, currSquare));
+							result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 						}
 						break;
 					}
@@ -221,10 +214,10 @@ public class SquareButton extends JButton implements ActionListener {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
-						result.add(new Move(mySquare, currSquare));
+						result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 					} else {
 						if (currSquare.myPiece.colour!=mySquare.myPiece.colour) {
-							result.add(new Move(mySquare, currSquare));
+							result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 						}
 						break;
 					}
@@ -240,10 +233,10 @@ public class SquareButton extends JButton implements ActionListener {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
-						result.add(new Move(mySquare, currSquare));
+						result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 					} else {
 						if (currSquare.myPiece.colour!=mySquare.myPiece.colour) {
-							result.add(new Move(mySquare, currSquare));
+							result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 						}
 						break;
 					}
@@ -259,10 +252,10 @@ public class SquareButton extends JButton implements ActionListener {
 					//if this square is an empty square
 					Square currSquare = myBoard.board[currentRow][currentCol];
 					if (currSquare.myPiece==null) {
-						result.add(new Move(mySquare, currSquare));
+						result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 					} else {
 						if (currSquare.myPiece.colour!=mySquare.myPiece.colour) {
-							result.add(new Move(mySquare, currSquare));
+							result.add(new Move(mySquare, currSquare, mySquare.myPiece.colour));
 						}
 						break;
 					}
@@ -278,7 +271,7 @@ public class SquareButton extends JButton implements ActionListener {
 				if (!(((currentRow - 2) < 0) || (currentCol + 1) > 7)) {
 					Square targetSquare = myBoard.board[currentRow - 2][currentCol + 1];
 					if ((targetSquare.myPiece == null)||(targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -289,7 +282,7 @@ public class SquareButton extends JButton implements ActionListener {
 				if (!(((currentRow - 1) < 0) || (currentCol + 2) > 7)) {
 					Square targetSquare = myBoard.board[currentRow - 1][currentCol + 2];
 					if ((targetSquare.myPiece == null)||(targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -300,7 +293,7 @@ public class SquareButton extends JButton implements ActionListener {
 				if (!(((currentRow + 1) > 7) || (currentCol + 2) > 7)) {
 					Square targetSquare = myBoard.board[currentRow + 1][currentCol + 2];
 					if ((targetSquare.myPiece == null)||(targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -311,7 +304,7 @@ public class SquareButton extends JButton implements ActionListener {
 				if (!(((currentRow + 2) > 7) || (currentCol + 1) > 7)) {
 					Square targetSquare = myBoard.board[currentRow + 2][currentCol + 1];
 					if ((targetSquare.myPiece == null)||(targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -322,7 +315,7 @@ public class SquareButton extends JButton implements ActionListener {
 				if (!(((currentRow + 2) > 7) || (currentCol - 1) < 0)) {
 					Square targetSquare = myBoard.board[currentRow + 2][currentCol - 1];
 					if ((targetSquare.myPiece == null)||(targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -333,7 +326,7 @@ public class SquareButton extends JButton implements ActionListener {
 				if (!(((currentRow + 1) > 7) || (currentCol - 2) < 0)) {
 					Square targetSquare = myBoard.board[currentRow + 1][currentCol - 2];
 					if ((targetSquare.myPiece == null)||(targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -344,7 +337,7 @@ public class SquareButton extends JButton implements ActionListener {
 				if (!(((currentRow - 1) < 0) || (currentCol - 2) < 0)) {
 					Square targetSquare = myBoard.board[currentRow - 1][currentCol - 2];
 					if ((targetSquare.myPiece == null)||(targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -355,7 +348,7 @@ public class SquareButton extends JButton implements ActionListener {
 				if (!(((currentRow - 2) < 0) || (currentCol - 1) < 0)) {
 					Square targetSquare = myBoard.board[currentRow - 2][currentCol - 1];
 					if ((targetSquare.myPiece == null)||(targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -366,27 +359,27 @@ public class SquareButton extends JButton implements ActionListener {
 				if (currentRow==6) {
 					Square targetSquare = myBoard.board[currentRow - 1][currentCol];
 					if (targetSquare.myPiece == null) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 						targetSquare = myBoard.board[currentRow - 2][currentCol];
-						if (targetSquare.myPiece == null) result.add(new Move(mySquare, targetSquare));
+						if (targetSquare.myPiece == null) result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				} else if (currentRow > 0) {
 					Square targetSquare = myBoard.board[currentRow - 1][currentCol];
-					if (targetSquare.myPiece == null) result.add(new Move(mySquare, targetSquare));
+					if (targetSquare.myPiece == null) result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 				}
 				//check if capturing is possible
 				//check for left capturing
 				if ((currentCol > 0) && (currentRow > 0)) {
 					Square targetSquare = myBoard.board[currentRow - 1][currentCol - 1];
 					if ((targetSquare.myPiece!=null) && (targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				//check for right capturing
 				if ((currentCol < 7) && (currentRow > 0)) {
 					Square targetSquare = myBoard.board[currentRow - 1][currentCol + 1];
 					if ((targetSquare.myPiece!=null) && (targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -397,27 +390,27 @@ public class SquareButton extends JButton implements ActionListener {
 				if (currentRow==1) {
 					Square targetSquare = myBoard.board[currentRow + 1][currentCol];
 					if (targetSquare.myPiece == null) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 						targetSquare = myBoard.board[currentRow + 2][currentCol];
-						if (targetSquare.myPiece == null) result.add(new Move(mySquare, targetSquare));
+						if (targetSquare.myPiece == null) result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				} else if (currentRow < 7) {
 					Square targetSquare = myBoard.board[currentRow + 1][currentCol];
-					if (targetSquare.myPiece == null) result.add(new Move(mySquare, targetSquare));
+					if (targetSquare.myPiece == null) result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 				}
 				//check if capturing is possible
 				//check for left capturing
 				if ((currentCol > 0) && (currentRow < 7)) {
 					Square targetSquare = myBoard.board[currentRow + 1][currentCol - 1];
 					if ((targetSquare.myPiece!=null) && (targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				//check for right capturing
 				if ((currentCol < 7) && (currentRow < 7)) {
 					Square targetSquare = myBoard.board[currentRow + 1][currentCol + 1];
 					if ((targetSquare.myPiece!=null) && (targetSquare.myPiece.colour!=mySquare.myPiece.colour)) {
-						result.add(new Move(mySquare, targetSquare));
+						result.add(new Move(mySquare, targetSquare, mySquare.myPiece.colour));
 					}
 				}
 				break;
@@ -431,7 +424,7 @@ public class SquareButton extends JButton implements ActionListener {
 						if ((myBoard.board[currentRow][currentCol+1].myPiece == null) &&
 						(myBoard.board[currentRow][currentCol+2].myPiece == null)) {
 							Square targetSquare = myBoard.board[currentRow][currentCol + 2];
-							Move castling_move = new Move(mySquare, targetSquare);
+							Move castling_move = new Move(mySquare, targetSquare, mySquare.myPiece.colour);
 							castling_move.moveType = d;
 							System.out.println("d is: " + castling_move.moveType);
 							result.add(castling_move);
@@ -450,7 +443,7 @@ public class SquareButton extends JButton implements ActionListener {
 						(myBoard.board[currentRow][currentCol-2].myPiece == null) &&
 						(myBoard.board[currentRow][currentCol-3].myPiece == null)) {
 							Square targetSquare = myBoard.board[currentRow][currentCol - 2];
-							Move castling_move = new Move(mySquare, targetSquare);
+							Move castling_move = new Move(mySquare, targetSquare, mySquare.myPiece.colour);
 							castling_move.moveType = d;
 							System.out.println("d is: " + castling_move.moveType);
 							result.add(castling_move);
@@ -476,6 +469,20 @@ public class SquareButton extends JButton implements ActionListener {
 			}
 		}
 		return result;
+	}
+	
+	public void showLists() {
+		for (int row = 0; row < 8; row++) {
+			for(int col = 0; col < 8; col++) {
+				myBoard.board[row][col].mySB.setBackground(myBoard.board[row][col].mySB.defaultColor);
+			}
+		}
+		for(Square s: myBoard.myGame.whiteList) {
+			s.mySB.setBackground(Color.CYAN);
+		}
+		for(Square s: myBoard.myGame.blackList) {
+			s.mySB.setBackground(Color.BLUE);
+		}
 	}
 }
 

@@ -20,10 +20,12 @@ public class Move {
 	Square end;
 	Direction moveType;
 	Piece capturedPiece;
+	Colour movedColour;
 	
-	public Move(Square start, Square end) {
+	public Move(Square start, Square end, Colour movedColour) {
 		this.start = start;
 		this.end = end;
+		this.movedColour = movedColour;
 	}
 
 	@Override
