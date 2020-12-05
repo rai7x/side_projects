@@ -27,6 +27,7 @@ public class BoardHolder extends JFrame {
 //		setResizable(false);
 //		myBoardPanel.setVisible(true);
 		myWestPanel.setVisible(true);
+		setTitle("Chess317 Game");
 		setVisible(true);
 	}
 }
