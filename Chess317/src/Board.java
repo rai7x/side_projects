@@ -4,12 +4,15 @@ import java.util.Stack;
 import javax.swing.ImageIcon;
 
 public class Board{
+	
 	Square[][] board = new Square[8][8];
 	Square selectedSquare = null; //if the board has a square selected, this will not be null
 	Stack<Move> moveStack = new Stack<Move>();
 	Colour activeColour = Colour.WHITE;
 	Game myGame;
 	Square whiteKingSquare, blackKingSquare; //these squares point to the white/black kings throughout the game
+	public static Color darkColour = Color.DARK_GRAY;
+	public static Color lightColour = Color.LIGHT_GRAY;
 	
 	public void buildBoard(BoardPanel panel) {
 		for(int row = 0; row < 8; row++) {
@@ -18,14 +21,14 @@ public class Board{
 				SquareButton sbutton = new SquareButton();
 				panel.add(sbutton);
 				if (sum%2==0) {
-					sbutton.setBackground(Color.LIGHT_GRAY);
-					sbutton.defaultColor = Color.LIGHT_GRAY;
+					sbutton.setBackground(lightColour);
+					sbutton.defaultColor = lightColour;
 					//if the sum of row and col is even, then it's a white square
 					board[row][col] = new Square(row, col, Colour.WHITE, sbutton);
 					
 				} else {
-					sbutton.setBackground(Color.DARK_GRAY);
-					sbutton.defaultColor = Color.DARK_GRAY;
+					sbutton.setBackground(darkColour);
+					sbutton.defaultColor = darkColour;
 					//if the sum of row and col is odd, then it's a black square
 					board[row][col] = new Square(row, col, Colour.BLACK, sbutton);
 				}
