@@ -12,6 +12,7 @@ public class Pawn extends Piece {
 			directions.add(Direction.SP);
 		}
 		range = 1;
+		value = 1;
 		// TODO Auto-generated constructor stub
 	}
 

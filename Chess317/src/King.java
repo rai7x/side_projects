@@ -15,6 +15,7 @@ public class King extends Piece {
 		directions.add(Direction.NW);
 		directions.add(Direction.KSC);
 		directions.add(Direction.QSC);
+		value = 0;
 	}
 
 	@Override

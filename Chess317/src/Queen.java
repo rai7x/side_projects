@@ -13,6 +13,7 @@ public class Queen extends Piece {
 		directions.add(Direction.SE);
 		directions.add(Direction.SW);
 		directions.add(Direction.NW);
+		value = 9;
 	}
 
 	@Override

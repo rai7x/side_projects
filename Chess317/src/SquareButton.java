@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -26,6 +27,10 @@ public class SquareButton extends JButton implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//if the game has ended, do not allow actions to be performed
+		if (myBoard.myGame.status != GameStatus.inProgress) {
+			return;
+		}
 		//if starting square is selected
 		if (myBoard.selectedSquare!=null) {
 			//create list of valid moves
@@ -49,8 +54,12 @@ public class SquareButton extends JButton implements ActionListener {
 					//check if the move is legal - if so, undo the move
 					if (myBoard.isKingThreatened()) {
 						myBoard.undoMove(myBoard.moveStack.pop());
-					} else {
-						myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
+					} else { //the player has made a legal move
+						myBoard.swapActiveColour();
+						//determine if we are playing against AI
+						if (Game.myAILevel != AILevel.off) {
+							myBoard.myGame.myAI.makeMove();
+						}
 					}
 //					//debugging
 //					System.out.println("Enemy's List - My active colour was: " + myBoard.activeColour);
@@ -68,11 +77,20 @@ public class SquareButton extends JButton implements ActionListener {
 					if (myBoard.isKingThreatened()) {
 						//try every possible move
 						if (myBoard.isCheckmate()) {
-							JOptionPane.showMessageDialog(new JFrame(), myBoard.activeColour + " is checkmated!");
+							Colour winningColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
+							
+							JOptionPane.showMessageDialog(new JFrame(), myBoard.activeColour + " is checkmated! \n" + winningColour + " wins!");
+							myBoard.myGame.status = (winningColour == Colour.WHITE) ? GameStatus.winWhite : GameStatus.winBlack;
+							//turn off all buttons in the east panel
+							for (Component comp : myBoard.myGame.myBoardHolder.myEastPanel.getComponents()) {
+								comp.setEnabled(false);
+							}
 							System.out.println("Checkmate!");
 						}
 					} 
 //					//end of debug
+					
+
 					
 				} else {
 					//unselect the square
@@ -85,6 +103,7 @@ public class SquareButton extends JButton implements ActionListener {
 				System.out.print(myBoard);
 			}
 			myBoard.selectedSquare = null;
+			if (myBoard.myGame.status == GameStatus.inProgress) myBoard.myGame.myBoardHolder.myEastPanel.getComponent(0).setEnabled(true);
 			
 		}
 		//if starting square is not selected
@@ -105,6 +124,7 @@ public class SquareButton extends JButton implements ActionListener {
 					sb.setBackground(sb.getBackground().brighter());
 				}
 			}
+			myBoard.myGame.myBoardHolder.myEastPanel.getComponent(0).setEnabled(false);
 		}
 	}
 	
@@ -114,6 +134,10 @@ public class SquareButton extends JButton implements ActionListener {
 		
 		//iterate through each of my piece's directions, visiting each square until I reach the edge or another piece
 		//for each empty square visited, create a corresponding Move object, and add the Move object to the list of valid Moves
+		
+		if (mySquare.myPiece==null) mySquare.mySB.setBackground(Color.YELLOW);
+        //System.out.println("Active Colour: " + myBoard.activeColour);
+		
 		int size = mySquare.myPiece.directions.size();
 		for(int i = 0; i < size; i++) {
 			Direction d = mySquare.myPiece.directions.get(i);

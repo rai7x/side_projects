@@ -15,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -107,19 +108,19 @@ public class OptionsGui {
 		JButton chooseDark = new JButton("Choose Dark Colour");
 		JButton chooseLight = new JButton("Choose Light Colour");
 		
+		//title panel to store title label "Options", will be added to frame
 		JPanel titlePanel = new JPanel();
 		titlePanel.setLayout(new BorderLayout());
 		
-		//create title label (will be added to title panel)
 		JLabel titleLabel = new JLabel("Options");
 		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 75));
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		titlePanel.add(titleLabel);
 		
+		//button panel to store buttons, will be added to frame
 		JPanel btnPanel = new JPanel();
 		btnPanel.setBorder(BorderFactory.createEmptyBorder(75,75,0,0));
-		//btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.LINE_AXIS));
 		
 		//add actionlisteners to buttons
 		chooseDark.addActionListener(new DarkListener());
@@ -140,6 +141,11 @@ public class OptionsGui {
 		
 		miniBoardPanel.setBorder(BorderFactory.createEmptyBorder(50,50,50,50));
 		
+		//create JPanel for radio buttions (select AI)
+		JPanel radioPanel = new JPanel();
+		JRadioButton noAIBtn = new JRadioButton();
+		JRadioButton AIBtn1 = new JRadioButton();
+		
 		//add the panels to the frame
 		frame.add(btnPanel, BorderLayout.WEST);	
 		frame.add(titlePanel, BorderLayout.NORTH);
@@ -154,7 +160,27 @@ public class OptionsGui {
 		
 	}
 	
-	private static class MiniBoardPanel extends JPanel{
+	private class noAIListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Game.myAILevel = AILevel.off;
+			
+		}
+		
+	}
+	
+	private class AI1Listener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Game.myAILevel = AILevel.levelOne;
+			
+		}
+		
+	}
+	
+	private static class MiniBoardPanel extends JPanel {
 		public MiniBoardPanel() {
 			setLayout(new GridLayout(8,8));
 			setPreferredSize(new Dimension(200, 200));

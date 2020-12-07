@@ -11,6 +11,8 @@ public class Board{
 	Colour activeColour = Colour.WHITE;
 	Game myGame;
 	Square whiteKingSquare, blackKingSquare; //these squares point to the white/black kings throughout the game
+	
+	//set default board square colours
 	public static Color darkColour = Color.DARK_GRAY;
 	public static Color lightColour = Color.LIGHT_GRAY;
 	
@@ -94,32 +96,33 @@ public class Board{
 		board[0][6].myPiece = new Knight(Colour.BLACK, new ImageIcon("blackKnight.png"));
 		board[0][7].myPiece = new Rook(Colour.BLACK, new ImageIcon("blackRook.png"));
 		updateDisplay();
-		myGame = new Game(this); //adding the pieces to new Game's white/black Lists
 	}
 	
 	//moves a piece from starting square to endings square
-	public void performMove(Move m, boolean isTest) {
+	public void performMove(Move m) {
 		ArrayList<Square> activeList = (activeColour == Colour.WHITE) ? myGame.whiteList : myGame.blackList;
 		ArrayList<Square> oppositeList = (activeColour == Colour.WHITE) ? myGame.blackList : myGame.whiteList;
 		//if the destination square already has a piece, store it into capturedPiece
 		if (m.end.myPiece != null) {
 			m.capturedPiece = m.end.myPiece;
-			if (!isTest) oppositeList.remove(m.end); //if we are capturing an enemy's piece
+			oppositeList.remove(m.end); //if we are capturing an enemy's piece
 		}
 		//set the destination square to contain the moving piece
 		m.end.myPiece = m.start.myPiece;
+		//debug
+		if (m.end.myPiece==null) m.end.mySB.setBackground(Color.YELLOW);
 		m.end.myPiece.moveCount++;
 		//set the starting square to contain nothing
 		m.start.myPiece = null;
 //		System.out.println(m.moveType);
 		if (m.moveType == Direction.KSC) {
 			//if move type is castling, move the rook too
-			performMove(new Move(board[m.end.row][m.end.col+1], board[m.end.row][m.end.col-1], board[m.end.row][m.end.col+1].myPiece.colour), isTest);
+			performMove(new Move(board[m.end.row][m.end.col+1], board[m.end.row][m.end.col-1], board[m.end.row][m.end.col+1].myPiece.colour));
 			System.out.println("Castling");
 		}
 		if (m.moveType == Direction.QSC) {
 			//if move type is castling, move the rook too
-			performMove(new Move(board[m.end.row][m.end.col-2], board[m.end.row][m.end.col+1], board[m.end.row][m.end.col-2].myPiece.colour), isTest);
+			performMove(new Move(board[m.end.row][m.end.col-2], board[m.end.row][m.end.col+1], board[m.end.row][m.end.col-2].myPiece.colour));
 			System.out.println("Castling");
 		}
 		//check for promotion
@@ -135,29 +138,26 @@ public class Board{
 				m.isPromotion = true;
 			}
 		}
+		
 		updateDisplayAt(m.start);
 		updateDisplayAt(m.end);
+		
 		moveStack.push(m);
 		
+		//keep track of the king's locations
 		if(m.end.myPiece.mySymbol() == 'K') whiteKingSquare = m.end;
 		else if(m.end.myPiece.mySymbol() == 'k') blackKingSquare = m.end;
 		//if the move being passed in is not just a Checkmate Test
-		if (!isTest) {
-			activeList.add(m.end);
-			activeList.remove(m.start);
-		}
+		
+		activeList.add(m.end);
+		activeList.remove(m.start);
+		
 		
 //		displayLists();
 	}
-	
-	//moves a piece from starting square to endings square
-	//perform a move FOR REAL
-	public void performMove(Move m) {
-		performMove(m, false);
-	}
-	
+
 	//given a move object, undo the move
-	public void undoMove(Move m, boolean isTest) {
+	public void undoMove(Move m) {
 		ArrayList<Square> activeList = (m.movedColour == Colour.WHITE) ? myGame.blackList : myGame.whiteList;
 		ArrayList<Square> oppositeList = (m.movedColour == Colour.WHITE) ? myGame.whiteList : myGame.blackList;
 		//reverse starting square
@@ -186,16 +186,16 @@ public class Board{
 		updateDisplayAt(m.end);
 		
 		//it's the turn AFTER the move has been played, i.e. activeColour != the move m's active colour
-		if (!isTest) {
-			oppositeList.add(m.start);
-			oppositeList.remove(m.end);
 		
-		
-			//if this move captured an enemy piece
-			if (m.capturedPiece != null) {
-				activeList.add(m.end);
-			}
+		oppositeList.add(m.start);
+		oppositeList.remove(m.end);
+	
+	
+		//if this move captured an enemy piece
+		if (m.capturedPiece != null) {
+			activeList.add(m.end);
 		}
+		
 		
 		if(m.start.myPiece.mySymbol() == 'K') whiteKingSquare = m.start;
 		else if(m.start.myPiece.mySymbol() == 'k') blackKingSquare = m.start;
@@ -203,11 +203,6 @@ public class Board{
 		
 		board[0][0].mySB.showLists();
 //		displayLists();
-	}
-	
-	//undo a REAL move
-	public void undoMove(Move m) {
-		undoMove(m, false);
 	}
 	
 	//update a single square's icon based on what kind of piece it has
@@ -251,21 +246,27 @@ public class Board{
 		boolean result = true;
 		//first define the list
 		ArrayList<Square> myList = (activeColour==Colour.WHITE) ? myGame.whiteList : myGame.blackList;
+		ArrayList<Move> validMoves = new ArrayList<Move>();
 		//try every move in myList
 		for (Square s : myList) {
-			ArrayList<Move> validMoves = s.mySB.getValidMoves();
-			for (Move m: validMoves) {
-				performMove(m, true); //the true parameter means we're performing a test move
-				if (!isKingThreatened()) {
-					//we have found a legal move!
-					undoMove(moveStack.pop(), true);
-					return false;
-				} else {
-					undoMove(moveStack.pop(), true);
-				}
+			validMoves.addAll(s.mySB.getValidMoves());
+			
+		}
+		for (Move m: validMoves) {
+			performMove(m); //the true parameter means we're performing a test move
+			if (!isKingThreatened()) {
+				//we have found a legal move!
+				undoMove(moveStack.pop());
+				return false;
+			} else {
+				undoMove(moveStack.pop());
 			}
 		}
 		return result;
+	}
+	
+	public void swapActiveColour() {
+		activeColour = (activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
 	}
 }
 

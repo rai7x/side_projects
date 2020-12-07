@@ -4,17 +4,31 @@ import javax.swing.JButton;
 
 public class UndoButton extends JButton implements ActionListener {
 	Board myBoard;
-	UndoButton(Board myBoard) {
+	BoardHolder myBoardHolder;
+	
+	UndoButton(Board myBoard, BoardHolder myBoardHolder) {
 		this.myBoard = myBoard;
-		setText("Undo");
+		this.myBoardHolder = myBoardHolder;
+		
+		setText("Takeback");
 		addActionListener(this);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//check if we're playing an AI game
+		
 		if (!myBoard.moveStack.isEmpty()) {
-			myBoard.undoMove(myBoard.moveStack.pop());
-			myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE; //swap active colour
+			if (Game.myAILevel != AILevel.off) {
+				myBoard.undoMove(myBoard.moveStack.pop());
+				myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE; //swap active colour
+				myBoard.undoMove(myBoard.moveStack.pop());
+				myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE; //swap active colour
+			} else {
+				myBoard.undoMove(myBoard.moveStack.pop());
+				myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE; //swap active colour
+			}
+			
 		}
 	}
 }

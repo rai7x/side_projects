@@ -51,57 +51,6 @@ public class MainMenuGui extends JFrame{
 		frame.setResizable(false);
 		frame.setVisible(true);
 		
-		/*
-		Container container = window.getContentPane();
-		
-		//create title panel and add it to container
-		JPanel titlePanel = new JPanel();
-		titlePanel.setBounds(100, 100, 1000, 125);
-		
-		JLabel titleLabel = new JLabel("Chess317");
-		titleLabel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 100));
-		titlePanel.add(titleLabel);
-		
-		container.add(titlePanel);
-		
-		//create buttons, add it to container
-		int btnSpacing = 50;
-		int btnWidth = 200;
-		int btnHeight = 100;
-		
-		JButton playButton = new JButton("Play");
-		playButton.setBackground(Color.black);
-		playButton.setFocusPainted(false);
-		playButton.setFont(new Font("Courier New", Font.PLAIN, 50));
-		playButton.setForeground(Color.white);
-		playButton.setBounds(100, 600, btnWidth, btnHeight);
-		container.add(playButton);
-
-		JButton loginButton = new JButton("Log-In");
-		loginButton.setBackground(Color.black);
-		loginButton.setFocusPainted(false);
-		loginButton.setFont(new Font("Courier New", Font.PLAIN, 40));
-		loginButton.setForeground(Color.white);
-		loginButton.setBounds(100 + btnSpacing + btnWidth, 600, btnWidth, btnHeight);
-		container.add(loginButton);
-		
-		JButton regAccButton = new JButton("Register");
-		regAccButton.setBackground(Color.black);
-		regAccButton.setFocusPainted(false);
-		regAccButton.setFont(new Font("Courier New", Font.PLAIN, 30));
-		regAccButton.setForeground(Color.white);
-		regAccButton.setBounds(100 + 2*btnSpacing + 2*btnWidth, 600, btnWidth, btnHeight);
-		container.add(regAccButton);
-		
-		JButton optButton = new JButton("Options");
-		optButton.setBackground(Color.black);
-		optButton.setFocusPainted(false);
-		optButton.setFont(new Font("Courier New", Font.PLAIN, 35));
-		optButton.setForeground(Color.white);
-		optButton.setBounds(100 + 3*btnSpacing + 3*btnWidth, 600, btnWidth, btnHeight);
-		container.add(optButton);
-		
-		*/
 	}
 	
 }
