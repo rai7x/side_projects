@@ -51,7 +51,7 @@ public class AI2 extends AIParent{
 		
 		myBoard.performMove(chosenMove);
 		
-		myBoard.board[0][0].mySB.showLists();
+		//myBoard.board[0][0].mySB.showLists(); //debugging
 		
 		myBoard.swapActiveColour();
 		

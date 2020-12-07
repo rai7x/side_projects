@@ -201,7 +201,7 @@ public class Board{
 		else if(m.start.myPiece.mySymbol() == 'k') blackKingSquare = m.start;
 		
 		
-		board[0][0].mySB.showLists();
+		//board[0][0].mySB.showLists(); debugging
 //		displayLists();
 	}
 	

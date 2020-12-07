@@ -3,7 +3,6 @@ import java.util.Random;
 
 public class AI extends AIParent{
 	Board myBoard;
-	Colour myColour; //AI can only play as black
 	ArrayList<Move> myValidMoves = new ArrayList<Move>();
 	ArrayList<Move> myLegalMoves = new ArrayList<Move>();
 	
@@ -18,7 +17,7 @@ public class AI extends AIParent{
 		myLegalMoves.clear();
 		
 		//grab all of the squares with black pieces
-		ArrayList<Square> mySquares = myBoard.myGame.blackList;
+		ArrayList<Square> mySquares = (myColour == Colour.WHITE) ? myBoard.myGame.whiteList : myBoard.myGame.blackList;
 		
 		//generate list of ALL valid moves (iterate through each square)
 		for (Square s : mySquares) {
@@ -52,9 +51,9 @@ public class AI extends AIParent{
 		
 		myBoard.performMove(chosenMove);
 		
-		myBoard.board[0][0].mySB.showLists();
+		//myBoard.board[0][0].mySB.showLists(); debugging
 		
-		myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
+		myBoard.swapActiveColour();
 		
 		return true;
 	}

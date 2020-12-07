@@ -34,8 +34,12 @@ public class BoardHolder extends JFrame {
 //		setResizable(false);
 //		myBoardPanel.setVisible(true);
 		myWestPanel.setVisible(true);
-		if (Game.myAILevel == AILevel.off)	setTitle("Chess317 Game");
-		else setTitle("Chess317 Game vs AI");
+
+		if (Game.myAILevel == AILevel.off) setTitle("Chess317 Game");
+		else {
+			setTitle("Chess317 Game vs AI " + Game.myAILevel);
+		}
+
 		setResizable(false);
 		setVisible(true);
 	}
