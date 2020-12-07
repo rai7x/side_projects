@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 
 public class MainMenuGui extends JFrame{
 	
@@ -22,8 +23,8 @@ public class MainMenuGui extends JFrame{
 		frame.getContentPane().setBackground(Color.white);
 		
 		//create button panel (will be added to frame)
-		JPanel btnPanel = new JPanel();
-		btnPanel.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
+		JPanel btnPanel = new JPanel(new GridLayout(0,1));
+		btnPanel.setBorder(BorderFactory.createEmptyBorder(200, 200, 200, 200));
 		
 		//create title panel (will be added to frame)
 		JPanel titlePanel = new JPanel();
@@ -46,7 +47,7 @@ public class MainMenuGui extends JFrame{
 		frame.add(btnPanel, BorderLayout.CENTER);
 
 		frame.pack();
-		frame.setTitle("Chess317");
+		frame.setTitle("Chess317 Menu");
 		frame.setSize(1200, 800);
 		frame.setResizable(false);
 		frame.setVisible(true);

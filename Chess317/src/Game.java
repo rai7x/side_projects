@@ -2,11 +2,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 enum GameStatus{inProgress, winWhite, winBlack, draw}
-enum AILevel{off, levelOne}
+enum AILevel{off, levelOne, levelTwo}
 
 public class Game {
 	GameStatus status = GameStatus.inProgress;
-	Colour winner;
+	public static Colour AIColour;
 	Board myBoard;
 	ArrayList<Square> whiteList = new ArrayList<Square>(); //list of squares containing white pieces
 	ArrayList<Square> blackList = new ArrayList<Square>(); //list of squares containing black pieces
