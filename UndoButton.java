@@ -21,10 +21,17 @@ public class UndoButton extends JButton implements ActionListener {
 		if (!myBoard.moveStack.isEmpty()) {
 			if (Game.myAILevel != AILevel.off) {
 				myBoard.undoMove(myBoard.moveStack.pop());
-				myBoard.undoMove(myBoard.moveStack.pop());
+				myBoard.swapActiveColour();
+				//make sure the stack is not empty
+				if (!myBoard.moveStack.isEmpty()) {
+					myBoard.undoMove(myBoard.moveStack.pop());
+					myBoard.swapActiveColour();
+				} else {
+					myBoard.myGame.myAI.makeMove(); //make the ai first move again
+				}
 			} else {
 				myBoard.undoMove(myBoard.moveStack.pop());
-				myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE; //swap active colour
+				myBoard.swapActiveColour();
 			}
 			
 		}

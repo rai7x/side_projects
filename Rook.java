@@ -11,6 +11,7 @@ public class Rook extends Piece {
 		directions.add(Direction.E);
 		directions.add(Direction.S);
 		directions.add(Direction.W);
+		value = 5;
 	}
 
 	@Override

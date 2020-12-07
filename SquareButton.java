@@ -55,7 +55,7 @@ public class SquareButton extends JButton implements ActionListener {
 					if (myBoard.isKingThreatened()) {
 						myBoard.undoMove(myBoard.moveStack.pop());
 					} else { //the player has made a legal move
-						myBoard.activeColour = (myBoard.activeColour == Colour.WHITE) ? Colour.BLACK : Colour.WHITE;
+						myBoard.swapActiveColour();
 						//determine if we are playing against AI
 						if (Game.myAILevel != AILevel.off) {
 							myBoard.myGame.myAI.makeMove();
@@ -71,7 +71,7 @@ public class SquareButton extends JButton implements ActionListener {
 //					myBoard.blackKingSquare.mySB.setBackground(Color.magenta);
 					
 					
-					showLists();
+					//showLists();
 					//check if my opponent is checkmated by this move
 					//if opponent is in check
 					if (myBoard.isKingThreatened()) {
@@ -103,13 +103,13 @@ public class SquareButton extends JButton implements ActionListener {
 				System.out.print(myBoard);
 			}
 			myBoard.selectedSquare = null;
-			myBoard.myGame.myBoardHolder.myEastPanel.getComponent(0).setEnabled(true);
+			if (myBoard.myGame.status == GameStatus.inProgress) myBoard.myGame.myBoardHolder.myEastPanel.getComponent(0).setEnabled(true);
 			
 		}
 		//if starting square is not selected
 		else {
 			//debugging
-			showLists();
+			//showLists();
 			//end of debug
 			if ((mySquare.myPiece!=null) && (mySquare.myPiece.colour == myBoard.activeColour)) {
 				myBoard.selectedSquare = mySquare;

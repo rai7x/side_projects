@@ -1,12 +1,14 @@
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Random;
 
-public class AI extends AIParent{
+public class AI2 extends AIParent{
 	Board myBoard;
 	ArrayList<Move> myValidMoves = new ArrayList<Move>();
 	ArrayList<Move> myLegalMoves = new ArrayList<Move>();
+	PriorityQueue<Move> pq = new PriorityQueue<Move>();
 	
-	public AI(Board myBoard, Colour myColour) {
+	public AI2(Board myBoard, Colour myColour) {
 		this.myBoard = myBoard;
 		this.myColour = myColour;
 	}
@@ -15,6 +17,7 @@ public class AI extends AIParent{
 		//clear the myValidMoves list
 		myValidMoves.clear();
 		myLegalMoves.clear();
+		pq.clear();
 		
 		//grab all of the squares with black pieces
 		ArrayList<Square> mySquares = (myColour == Colour.WHITE) ? myBoard.myGame.whiteList : myBoard.myGame.blackList;
@@ -35,23 +38,20 @@ public class AI extends AIParent{
 			return false; //this must mean I am checkmated, or stalemated
 		}
 		
-		//randomly generate a number between 0 and size of myLegalMoves - 1
-		Random rand = new Random();
-		int index;
-		int upperBound = myLegalMoves.size() - 1;
-		
-		if (upperBound == 0) {
-			index = 0;
-		} else {
-			index = rand.nextInt(upperBound);
+		//try every legal move, then assign the board evaluation to each move
+		for (Move m : myLegalMoves) {
+			myBoard.performMove(m);
+			m.evaluation = evaluate();
+			pq.add(m);
+			myBoard.undoMove(myBoard.moveStack.pop());
 		}
 		
 		//grab the move with the randomly selected index
-		Move chosenMove = myLegalMoves.get(index);
+		Move chosenMove = pq.peek();
 		
 		myBoard.performMove(chosenMove);
 		
-		//myBoard.board[0][0].mySB.showLists(); debugging
+		//myBoard.board[0][0].mySB.showLists(); //debugging
 		
 		myBoard.swapActiveColour();
 		
@@ -61,7 +61,7 @@ public class AI extends AIParent{
 	public boolean isLegal(Move m) {
 		boolean result = true;
 		
-		//have to use true arguement because it is a test move
+		//have to use false argument / real move to update lists
 		myBoard.performMove(m);
 		
 		if(myBoard.isKingThreatened()) { //this is an illegal move
@@ -75,9 +75,21 @@ public class AI extends AIParent{
 	}
 
 	@Override
+	//evaluates the board position
 	public int evaluate() {
 		// TODO Auto-generated method stub
-		return 0;
+		ArrayList<Square> myList = (myBoard.activeColour == Colour.WHITE) ? myBoard.myGame.whiteList : myBoard.myGame.blackList;
+		ArrayList<Square> opList = (myBoard.activeColour == Colour.WHITE) ? myBoard.myGame.blackList : myBoard.myGame.whiteList;
+		int result = 0;
+		int myScore = 0, opponentScore = 0;
+		for (Square s: myList) {
+			myScore += s.myPiece.value;
+		}
+		for (Square s: opList) {
+			myScore += s.myPiece.value;
+		}
+		result = myScore - opponentScore;
+		return result;
 	}
 	
 }

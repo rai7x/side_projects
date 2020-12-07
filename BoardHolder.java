@@ -8,6 +8,7 @@ public class BoardHolder extends JFrame {
 	BoardPanel myBoardPanel;
 	WestPanel myWestPanel;
 	EastPanel myEastPanel;
+	NorthPanel myNorthPanel;
 	BoardHolder(BoardPanel boardPanel) {
 		myBoardPanel = boardPanel;
 		
@@ -23,15 +24,22 @@ public class BoardHolder extends JFrame {
 		ResignButton rb = new ResignButton(myBoardPanel.myBoard, this);
 		myEastPanel.add(rb);
 		
+		myNorthPanel = new NorthPanel();
+		
 		add(myWestPanel, BorderLayout.WEST);
 		add(myEastPanel, BorderLayout.EAST);
+		add(myNorthPanel, BorderLayout.NORTH);
 		
 		setSize(800, 700);
 //		setResizable(false);
 //		myBoardPanel.setVisible(true);
 		myWestPanel.setVisible(true);
-		if (Game.myAILevel == AILevel.off)	setTitle("Chess317 Game");
-		else setTitle("Chess317 Game vs AI");
+
+		if (Game.myAILevel == AILevel.off) setTitle("Chess317 Game");
+		else {
+			setTitle("Chess317 Game vs AI " + Game.myAILevel);
+		}
+
 		setResizable(false);
 		setVisible(true);
 	}

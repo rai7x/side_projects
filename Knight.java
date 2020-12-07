@@ -12,6 +12,7 @@ public class Knight extends Piece {
 		directions.add(Direction.SWW);
 		directions.add(Direction.NWW);
 		directions.add(Direction.NNW);
+		value = 3;
 	}
 
 	@Override

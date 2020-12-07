@@ -15,13 +15,14 @@
 //	}
 //}
 
-public class Move {
+public class Move implements Comparable<Move> {
 	Square start;
 	Square end;
 	Direction moveType;
 	Piece capturedPiece;
 	Colour movedColour;
 	boolean isPromotion;
+	int evaluation = 0;
 	
 	public Move(Square start, Square end, Colour movedColour) {
 		this.start = start;
@@ -42,6 +43,13 @@ public class Move {
 	
 	public String toString() {
 		return "Starting Square: (" + start.row + ", " + start.col + ") End Square: (" + end.row + ", " + end.col + ")";
+	}
+
+	@Override
+	public int compareTo(Move other) {
+		// TODO Auto-generated method stub
+		if (this.evaluation == other.evaluation) return 0;
+		return other.evaluation < this.evaluation ? 1 : -1;
 	}
 }
 
