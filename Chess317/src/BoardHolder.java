@@ -30,7 +30,7 @@ public class BoardHolder extends JFrame {
 		add(myEastPanel, BorderLayout.EAST);
 		add(myNorthPanel, BorderLayout.NORTH);
 		
-		setSize(800, 700);
+		setSize(800, 670);
 //		setResizable(false);
 //		myBoardPanel.setVisible(true);
 		myWestPanel.setVisible(true);
