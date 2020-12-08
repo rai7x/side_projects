@@ -34,6 +34,9 @@ public class PlayButton extends MenuButton implements ActionListener{
 		case levelTwo:
 			newGame.myAI = new AI2(b, Game.AIColour);
 			break;
+		case levelThree:
+			newGame.myAI = new AI3(b, Game.AIColour);
+			break;
 		}
 		
 		b.myGame = newGame;

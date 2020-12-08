@@ -81,14 +81,14 @@ public class AI2 extends AIParent{
 		ArrayList<Square> myList = (myBoard.activeColour == Colour.WHITE) ? myBoard.myGame.whiteList : myBoard.myGame.blackList;
 		ArrayList<Square> opList = (myBoard.activeColour == Colour.WHITE) ? myBoard.myGame.blackList : myBoard.myGame.whiteList;
 		int result = 0;
-		int myScore = 0, opponentScore = 0;
+		int myScore = 0, opScore = 0;
 		for (Square s: myList) {
 			myScore += s.myPiece.value;
 		}
 		for (Square s: opList) {
-			myScore += s.myPiece.value;
+			opScore += s.myPiece.value;
 		}
-		result = myScore - opponentScore;
+		result = myScore - opScore;
 		return result;
 	}
 	

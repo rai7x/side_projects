@@ -49,7 +49,7 @@ public class Move implements Comparable<Move> {
 	public int compareTo(Move other) {
 		// TODO Auto-generated method stub
 		if (this.evaluation == other.evaluation) return 0;
-		return other.evaluation < this.evaluation ? 1 : -1;
+		return other.evaluation > this.evaluation ? 1 : -1;
 	}
 }
 

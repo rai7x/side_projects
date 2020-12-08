@@ -71,7 +71,7 @@ public class SquareButton extends JButton implements ActionListener {
 //					myBoard.blackKingSquare.mySB.setBackground(Color.magenta);
 					
 					
-					//showLists();
+//					showLists();
 					//check if my opponent is checkmated by this move
 					//if opponent is in check
 					if (myBoard.isKingThreatened()) {
@@ -109,7 +109,7 @@ public class SquareButton extends JButton implements ActionListener {
 		//if starting square is not selected
 		else {
 			//debugging
-			//showLists();
+//			showLists();
 			//end of debug
 			if ((mySquare.myPiece!=null) && (mySquare.myPiece.colour == myBoard.activeColour)) {
 				myBoard.selectedSquare = mySquare;

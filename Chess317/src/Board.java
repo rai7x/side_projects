@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Stack;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Board{
 	
@@ -110,7 +112,10 @@ public class Board{
 		//set the destination square to contain the moving piece
 		m.end.myPiece = m.start.myPiece;
 		//debug
-		if (m.end.myPiece==null) m.end.mySB.setBackground(Color.YELLOW);
+		if (m.end.myPiece==null) {
+			m.end.mySB.setBackground(Color.YELLOW);
+			m.start.mySB.setBackground(Color.YELLOW);
+		}
 		m.end.myPiece.moveCount++;
 		//set the starting square to contain nothing
 		m.start.myPiece = null;
@@ -201,7 +206,7 @@ public class Board{
 		else if(m.start.myPiece.mySymbol() == 'k') blackKingSquare = m.start;
 		
 		
-		//board[0][0].mySB.showLists(); debugging
+//		board[0][0].mySB.showLists(); //debugging
 //		displayLists();
 	}
 	

@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 enum GameStatus{inProgress, winWhite, winBlack, draw}
-enum AILevel{off, levelOne, levelTwo}
+enum AILevel{off, levelOne, levelTwo, levelThree}
 
 public class Game {
 	GameStatus status = GameStatus.inProgress;
