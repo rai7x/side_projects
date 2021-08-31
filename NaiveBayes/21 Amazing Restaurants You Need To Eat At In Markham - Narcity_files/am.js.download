@@ -1,0 +1,73 @@
+(function() {var websiteId=8067239;var trackingServerDomain='www.anrdoezrs.net';var generateLinkOnLoad=false;var publisherId=4741840;var sid=undefined;var debug=false;(function() {
+    var getPageBasedImpressionUrl = function() {
+        return 'https://' + trackingServerDomain + '/pageImpression';
+    },
+    collectDomains = function (content) {
+        var collectedDomains =  [];
+        var anchors = content.getElementsByTagName("a");
+        for (var i = 0; i < anchors.length; i++) {
+            var url = anchors[i].href;
+            collectedDomains.push(url.toLowerCase());
+        }
+        return collectedDomains;
+    },
+    collectImpressions = function(doc) {
+        var imgs = doc.getElementsByTagName("img");
+        var srcs = [];
+        for (var i=0; i < imgs.length; i++) {
+            var matches = imgs[i].src.match(/image-(\d+-\d+)/);
+            if (matches) {
+                srcs.push(imgs[i].src);
+            }
+        }
+        return srcs;
+    },
+    appendThirdPartyImpressions = function(thirdPartyImpressions) {
+        var impressionSources = JSON.parse(thirdPartyImpressions);
+        for(var i=0; i<impressionSources.length; i++) {
+            var hiddenDiv = document.createElement("div");
+            var url = impressionSources[i] + '&cachebuster=' + i;
+            hiddenDiv.innerHTML = "<img style=\"display:none\" src=\"" + url + "\" />";
+            document.body.appendChild(hiddenDiv.firstChild);
+        }
+    },
+    trackImpressions = function (doc) {
+        var xhr = createCORSRequest('POST', getPageBasedImpressionUrl());
+        if (xhr) {
+            xhr.send(JSON.stringify({
+                publisherId: publisherId,
+                websiteId: websiteId,
+                urls: collectDomains(doc),
+                impressions: collectImpressions(doc)
+            }));
+
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === 4 && xhr.status == 200) {
+                    var thirdPartyImpressions = xhr.responseText;
+                    if(thirdPartyImpressions !== undefined && thirdPartyImpressions.length > 0) {
+                        appendThirdPartyImpressions(thirdPartyImpressions);
+                    }
+                }
+            };
+        }
+    },
+    createCORSRequest = function(method, url) {
+        var xhr = new XMLHttpRequest();
+
+        if ("withCredentials" in xhr) {
+            xhr.open(method, url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.withCredentials = true;
+        } else if (typeof XDomainRequest != "undefined") {
+            // IE <9 way of making CORS requests
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+    };
+
+    return trackImpressions(document);
+})();
+})()
